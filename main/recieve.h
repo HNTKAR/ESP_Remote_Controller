@@ -1,11 +1,22 @@
-#ifndef __RECEIVE_H__
-#define __RECEIVE_H__
+#ifndef __RECIEVE_H__
+#define __RECIEVE_H__
+#include <time.h>
+#include <sys/time.h>
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
+#include "driver/gptimer.h"
 #include "esp_err.h"
 
-void recieve_init();
-void recieve_set();
-void recieve_isr(void* arg);
+static gptimer_handle_t timer;
 
-#endif // __RECEIVE_H__
+typedef struct
+{
+    bool is_high;
+    uint64_t last_change_time;
+} edge_timing_t;
+// static edge_timing_t last_timing = {0, 0};
+
+void recieve_init(QueueHandle_t queue);
+void recieve_isr(void *arg);
+
+#endif // __RECIEVE_H__
