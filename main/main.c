@@ -5,16 +5,16 @@
 
 void print_timing(void *arg) {
     QueueHandle_t queue = (QueueHandle_t)arg;
-    bool odd = false;
+    bool is_high = false;
     while (1) {
         edge_timing_t timing;
         if (xQueueReceive(queue, &timing, portMAX_DELAY)) {
             if (timing.last_change_time > 50000) {
-                printf("Timing(%s): %llu (overflow)\n", timing.is_high ? "high" : "low", timing.last_change_time);
-                odd = false;
+                printf("Timing (LOW): %llu (overflow)\n", timing.last_change_time);
+                is_high = true;
             } else {
-                odd = !odd;
-                printf("Timing(%s): %llu%s\n", timing.is_high ? "high" : "low", timing.last_change_time, odd ? " (odd)" : "");
+                is_high = !is_high;
+                printf("Timing (%s): %llu\n", is_high ? "LOW" : "HIGH", timing.last_change_time);
             }
         }
     }
