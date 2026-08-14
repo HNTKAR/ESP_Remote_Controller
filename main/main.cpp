@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <iostream>
 #include "driver/ledc.h"
 #include "send.h"
 #include "recieve.h"
@@ -10,17 +10,17 @@ void print_timing(void *arg) {
         edge_timing_t timing;
         if (xQueueReceive(queue, &timing, portMAX_DELAY)) {
             if (timing.last_change_time > 50000) {
-                printf("Timing (LOW): %llu (overflow)\n", timing.last_change_time);
+                std::cout << "Timing (LOW): " << timing.last_change_time << " (overflow)" << std::endl;
                 is_high = true;
             } else {
                 is_high = !is_high;
-                printf("Timing (%s): %llu\n", is_high ? "LOW" : "HIGH", timing.last_change_time);
+                std::cout << "Timing (" << (is_high ? "LOW" : "HIGH") << "): " << timing.last_change_time << std::endl;
             }
         }
     }
 }
 
-void app_main(void){
+extern "C" void app_main(void){
     QueueHandle_t xQueue1 =NULL;
     xQueue1 = xQueueCreate(10, sizeof(edge_timing_t));
     xTaskCreate(print_timing, "print_timing", 4096, xQueue1, 5, NULL);

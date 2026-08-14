@@ -8,11 +8,10 @@ void recieve_init(QueueHandle_t queue) {
     ESP_ERROR_CHECK(gpio_install_isr_service(0));
     ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_12, recieve_isr, queue));
     gpio_dump_io_configuration(stdout, (1ULL << GPIO_NUM_12));
-    gptimer_config_t timer_config = {
-        .clk_src = GPTIMER_CLK_SRC_DEFAULT,
-        .direction = GPTIMER_COUNT_UP,
-        .resolution_hz = 1000000, // 1 MHz resolution
-    };
+    gptimer_config_t timer_config = {};
+    timer_config.clk_src = GPTIMER_CLK_SRC_DEFAULT;
+    timer_config.direction = GPTIMER_COUNT_UP;
+    timer_config.resolution_hz = 1000000; // 1 MHz resolution
     ESP_ERROR_CHECK(gptimer_new_timer(&timer_config, &timer));
     ESP_ERROR_CHECK(gptimer_enable(timer));
     ESP_ERROR_CHECK(gptimer_start(timer));
