@@ -11,25 +11,26 @@ void recieveMain::start()
     std::cout << "Thread started." << std::endl;
     recieveSignal *signal = new recieveSignal();
     std::vector<uint64_t> timingData;
-    QueueHandle_t timingQueue = xQueueCreate(10, sizeof(uint64_t));
+    QueueHandle_t timingQueue = xQueueCreate(100, sizeof(uint64_t));
     signal->init(timingQueue);
 
     while (true)
     {
         uint64_t delta_time;
-        BaseType_t result = xQueueReceive(timingQueue, &delta_time, 1000 / portTICK_PERIOD_MS);
+        BaseType_t result = xQueueReceive(timingQueue, &delta_time, 100 / portTICK_PERIOD_MS);
         if (result == pdTRUE)
         {
             timingData.push_back(delta_time);
         }
-        else
+        else if (!timingData.empty())
         {
-            std::cout << "Failed to receive from queue." << std::endl;
             std::cout << "Timing Data: ";
             for (const auto &time : timingData)
             {
                 std::cout << time << " ";
             }
+            std::cout << std::endl;
+            std::cout << "vector size: " << timingData.size();
             std::cout << std::endl;
             timingData.clear();
         }
