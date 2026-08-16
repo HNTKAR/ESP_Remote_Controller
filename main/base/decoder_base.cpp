@@ -46,9 +46,7 @@ void DecoderBase::DisplayDecodedData(bool rev) const
             {
                 tmpData = 0;
                 for (int i = 0; i < 8; ++i)
-                {
                     tmpData |= ((data >> i) & 0x01) << (7 - i);
-                }
             }
             std::cout << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(tmpData) << " ";
         }

@@ -25,7 +25,7 @@ public:
 
     virtual ~DecoderBase() = default;
     virtual bool decode(const std::vector<uint64_t> &timingData) = 0;
-    void DisplayDecodedData(bool reverse = false) const;
+    virtual void DisplayDecodedData(bool reverse = false) const;
     void reset();
 
 protected:

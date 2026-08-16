@@ -42,6 +42,30 @@ bool DecoderDAIKIN::checkLeader(const std::vector<uint64_t> &timingData, uint64_
     return ret;
 }
 
+void DecoderDAIKIN::DisplayDecodedData(bool rev) const
+{
+    DecoderBase::DisplayDecodedData(rev);
+    if (decodedData.size() >= 2)
+    {
+        std::cout << std::dec << std::endl;
+
+        uint8_t power = decodedData[1][5] & 0b0001;
+        std::cout << "Power: " << (power ? "ON" : "OFF") << std::endl;
+
+        uint8_t mode = (decodedData[1][5] >> 4) & 0b0111;
+        std::cout << "Mode: " << static_cast<int>(mode) << std::endl;
+
+        uint8_t temperature = (decodedData[1][6] >> 1) & 0b00111111;
+        std::cout << "Temperature: " << static_cast<int>(temperature) << std::endl;
+
+        uint8_t fanSpeed = (decodedData[1][8] >> 4) & 0b00001111;
+        std::cout << "Fan Speed: " << static_cast<int>(fanSpeed) << std::endl;
+
+        uint8_t fanDirection = (decodedData[1][8] >> 3) & 0b1;
+        std::cout << "Fan Direction: " << (fanDirection ? "ON" : "OFF") << std::endl;
+    }
+}
+
 /// @brief DAIKINデータのチェックを行う。timingDataからindex位置のデータを読み取り、バイナリデータに変換する。
 /// @param timingData DAIKIN信号のタイミングデータのベクター
 /// @param index データを読み取る開始位置のインデックス。チェック後、次のデータの開始位置に更新される。
