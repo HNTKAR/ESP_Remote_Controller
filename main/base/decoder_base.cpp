@@ -1,5 +1,8 @@
 #include "decoder_base.h"
 
+/// @brief バイナリデータを8ビットごとにまとめて16進数に変換し、decodedDataベクターに格納する。
+/// @param binData バイナリデータのベクター
+/// @return データが正常にプッシュされた場合はtrue、それ以外の場合はfalse。
 bool DecoderBase::pushBin2Vector(std::vector<uint8_t> &binData)
 {
     std::vector<uint8_t> tempBinData;
@@ -16,11 +19,15 @@ bool DecoderBase::pushBin2Vector(std::vector<uint8_t> &binData)
         decodedData.push_back(tempBinData);
     return true;
 }
+
+/// @brief デコードされたデータをリセットする。decodedDataベクターをクリアする。
 void DecoderBase::reset()
 {
     decodedData.clear();
 }
 
+/// @brief デコードされたデータを表示する。
+/// @param rev データを逆順に表示するかどうかを指定するフラグ。デフォルトはfalse。
 void DecoderBase::DisplayDecodedData(bool rev) const
 {
 #ifdef USE_IOSTREAM_FOR_DEBUG
@@ -43,7 +50,7 @@ void DecoderBase::DisplayDecodedData(bool rev) const
                     tmpData |= ((data >> i) & 0x01) << (7 - i);
                 }
             }
-            std::cout<< std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(tmpData) << " ";
+            std::cout << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(tmpData) << " ";
         }
         std::cout << std::endl;
     }

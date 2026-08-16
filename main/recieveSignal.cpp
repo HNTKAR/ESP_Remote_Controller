@@ -1,5 +1,7 @@
 #include "recieveSignal.h"
 
+/// @brief recieveSignalクラスのinitメソッド。GPIOピンの設定とタイマーの初期化を行う。
+/// @param timingQueue タイミングデータを保持するキューのハンドル
 void recieveSignal::init(QueueHandle_t timingQueue)
 {
     previous_time = 0;
@@ -8,6 +10,8 @@ void recieveSignal::init(QueueHandle_t timingQueue)
     timing = timingQueue; // Assign the passed queue to the member variable
 }
 
+/// @brief recieveSignalクラスのGPIO初期化メソッド。GPIOピンの設定と割り込みの設定を行う。
+/// @return なし
 void recieveSignal::initGpio()
 {
     ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_12));
@@ -19,6 +23,8 @@ void recieveSignal::initGpio()
                                          { ((recieveSignal *)arg)->isr(); }, this));
 }
 
+/// @brief recieveSignalクラスのGPTimer初期化メソッド。GPTimerの設定と開始を行う。
+/// @return なし
 void recieveSignal::initGptTimer()
 {
     gptimer_config_t timer_config = {};
@@ -30,6 +36,8 @@ void recieveSignal::initGptTimer()
     ESP_ERROR_CHECK(gptimer_start(timer));
 }
 
+/// @brief recieveSignalクラスの割り込みサービスルーチン。GPIOピンの変化を検出し、タイミングデータをキューに送信する。
+/// @return なし
 void recieveSignal::isr()
 {
     uint64_t current_time;
@@ -44,6 +52,8 @@ void recieveSignal::isr()
     }
 }
 
+/// @brief recieveSignalクラスのresetメソッド。タイマーを停止し、カウントをリセットして再起動する。
+/// @return なし
 void recieveSignal::reset()
 {
     ESP_ERROR_CHECK(gptimer_stop(timer));

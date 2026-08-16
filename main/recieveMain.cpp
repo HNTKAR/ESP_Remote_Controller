@@ -1,11 +1,13 @@
 #include "recieveMain.h"
 #include "decoder_DAIKIN.h"
 
+/// @brief recieveMainクラスのinitメソッド。初期化処理を行う。
 void recieveMain::init()
 {
     iostreamDebug("Initializing recieveMain...");
 }
 
+/// @brief recieveMainクラスのstartメソッド。スレッドを開始する際に呼び出される。
 void recieveMain::start()
 {
     // Code to start the thread
@@ -46,6 +48,8 @@ void recieveMain::start()
     }
 }
 
+/// @brief USE_IOSTREAM_FOR_DEBUGが定義されている場合に、デバッグメッセージを標準出力に表示する。
+/// @param message デバッグメッセージの文字列
 void recieveMain::iostreamDebug(const char *message) const
 {
 #ifdef USE_IOSTREAM_FOR_DEBUG
@@ -53,6 +57,9 @@ void recieveMain::iostreamDebug(const char *message) const
 #endif
 }
 
+/// @brief タイミングデータを表示する。USE_IOSTREAM_FOR_DEBUGが定義されている場合に、タイミングデータの内容を標準出力に表示する。
+/// @param timingData タイミングデータのベクター
+/// @return なし
 void recieveMain::displayTimingData(const std::vector<uint64_t> &timingData) const
 {
 #ifdef USE_IOSTREAM_FOR_DEBUG
@@ -73,6 +80,7 @@ void recieveMain::displayTimingData(const std::vector<uint64_t> &timingData) con
 #endif
 }
 
+/// @brief recieveMainクラスのstopメソッド。スレッドを停止する際に呼び出される。
 void recieveMain::stop()
 {
     iostreamDebug("Thread stopped.");
