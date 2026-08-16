@@ -17,7 +17,8 @@ public:
 
 private:
     TaskHandle_t recieveTaskHandle;
-    std::vector<uint64_t> timingData;
+    void displayTimingData(const std::vector<uint64_t> &timingData) const;
+    void iostreamDebug(const char *message) const;
 };
 
 #endif // __RECIEVE_MAIN_H__

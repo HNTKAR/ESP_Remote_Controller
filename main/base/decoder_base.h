@@ -4,6 +4,7 @@
 #include <cstdint>
 #ifdef USE_IOSTREAM_FOR_DEBUG
 #include <iostream>
+#include <iomanip>
 #endif
 class DecoderBase
 {
@@ -24,7 +25,7 @@ public:
 
     virtual ~DecoderBase() = default;
     virtual bool decode(const std::vector<uint64_t> &timingData) = 0;
-    void DisplayDecodedData() const;
+    void DisplayDecodedData(bool reverse = false) const;
     void reset();
 
 protected:

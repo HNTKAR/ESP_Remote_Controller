@@ -3,17 +3,13 @@
 
 void recieveMain::init()
 {
-#ifdef USE_IOSTREAM_FOR_DEBUG
-    std::cout << "Initializing recieveMain..." << std::endl;
-#endif
+    iostreamDebug("Initializing recieveMain...");
 }
 
 void recieveMain::start()
 {
     // Code to start the thread
-#ifdef USE_IOSTREAM_FOR_DEBUG
-    std::cout << "Thread started." << std::endl;
-#endif
+    iostreamDebug("Thread started.");
     recieveSignal *signal = new recieveSignal();
     std::vector<uint64_t> timingData;
     QueueHandle_t timingQueue = xQueueCreate(100, sizeof(uint64_t));
@@ -31,38 +27,18 @@ void recieveMain::start()
         {
             if (timingData.size() > 10)
             {
-#ifdef USE_IOSTREAM_FOR_DEBUG
-                std::cout << std::dec << "Timing Data: ";
-                for (int i = 0; i < timingData.size(); ++i)
-                {
-                    if (timingData[i] > 1500)
-                        std::cout << i << ": " << timingData[i] << " " << std::endl;
-                }
-                for (const auto &time : timingData)
-                {
-
-                    std::cout << time << " ";
-                }
-                std::cout << std::endl;
-                std::cout << "vector size: " << timingData.size();
-                std::cout << std::endl;
-#endif
+                displayTimingData(timingData);
 
                 DecoderDAIKIN decoder;
                 bool decodeResult = decoder.decode(timingData);
                 if (decodeResult)
                 {
-#ifdef USE_IOSTREAM_FOR_DEBUG
-                    std::cout << "Decoding successful!" << std::endl;
-#endif
                     decoder.DisplayDecodedData();
                     decoder.reset(); // Reset the decoder for the next decoding session
                 }
                 else
                 {
-#ifdef USE_IOSTREAM_FOR_DEBUG
-                    std::cout << "Decoding failed." << std::endl;
-#endif
+                    iostreamDebug("Decoding failed.");
                 }
             }
             timingData.clear();
@@ -70,10 +46,34 @@ void recieveMain::start()
     }
 }
 
+void recieveMain::iostreamDebug(const char *message) const
+{
+#ifdef USE_IOSTREAM_FOR_DEBUG
+    std::cout << message << std::endl;
+#endif
+}
+
+void recieveMain::displayTimingData(const std::vector<uint64_t> &timingData) const
+{
+#ifdef USE_IOSTREAM_FOR_DEBUG
+    std::cout << std::dec << "Timing Data: ";
+    for (int i = 0; i < timingData.size(); ++i)
+    {
+        if (timingData[i] > 1500)
+            std::cout << i << ": " << timingData[i] << " " << std::endl;
+    }
+    for (const auto &time : timingData)
+    {
+
+        std::cout << time << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "vector size: " << timingData.size();
+    std::cout << std::endl;
+#endif
+}
+
 void recieveMain::stop()
 {
-    // Code to stop the thread
-#ifdef USE_IOSTREAM_FOR_DEBUG
-    std::cout << "Thread stopped." << std::endl;
-#endif
+    iostreamDebug("Thread stopped.");
 }
