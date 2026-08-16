@@ -49,14 +49,20 @@ void DecoderDAIKIN::DisplayDecodedData(bool rev) const
     {
         std::cout << std::dec << std::endl;
 
-        uint8_t power = decodedData[1][5] & 0x0f;
+        uint8_t power = decodedData[1][5] & 0x01;
         std::cout << "Power: ";
-        if (power == 8)
+        switch (power)
+        {
+        case 0:
             std::cout << "OFF" << std::endl;
-        else if (power == 9)
+            break;
+        case 1:
             std::cout << "ON" << std::endl;
-        else
+            break;
+        default:
             std::cout << "Unknown" << std::endl;
+            break;
+        }
 
         uint8_t mode = (decodedData[1][5] >> 4) & 0x0f;
         std::cout << "Mode: ";
@@ -95,12 +101,15 @@ void DecoderDAIKIN::DisplayDecodedData(bool rev) const
         case 11:
             std::cout << "Quiet" << std::endl;
             break;
+        case 0:
+            std::cout << "1" << std::endl;
+            break;
         default:
             std::cout << static_cast<int>(fanSpeed) - 2 << std::endl;
             break;
         }
 
-        uint8_t fanDirection = (decodedData[1][8] >> 4) & 0x0f;
+        uint8_t fanDirection = decodedData[1][8] & 0x0f;
         std::cout << "Fan Direction: ";
         switch (fanDirection)
         {
@@ -125,14 +134,35 @@ void DecoderDAIKIN::DisplayDecodedData(bool rev) const
         offTimer |= (decodedData[1][11] >> 4) & 0x0f;
         std::cout << "Off Timer: " << offTimer << " minutes" << std::endl;
 
-        uint8_t streamer = (decodedData[1][16] >> 4) & 0x0f;
-        std::cout << "Streamer: ";
-        if (streamer == 8)
+        uint8_t sleepTimer = (decodedData[1][16] >> 5) & 0x01;
+        std::cout << "Sleep Timer: ";
+        switch (sleepTimer)
+        {
+        case 0:
             std::cout << "OFF" << std::endl;
-        else if (streamer == 9)
+            break;
+        case 1:
             std::cout << "ON" << std::endl;
-        else
+            break;
+        default:
             std::cout << "Unknown" << std::endl;
+            break;
+        }
+
+        uint8_t streamer = (decodedData[1][16] >> 4) & 0x01;
+        std::cout << "Streamer: ";
+        switch (streamer)
+        {
+        case 0:
+            std::cout << "OFF" << std::endl;
+            break;
+        case 1:
+            std::cout << "ON" << std::endl;
+            break;
+        default:
+            std::cout << "Unknown" << std::endl;
+            break;
+        }
     }
 }
 
