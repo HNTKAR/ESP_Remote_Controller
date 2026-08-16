@@ -49,20 +49,90 @@ void DecoderDAIKIN::DisplayDecodedData(bool rev) const
     {
         std::cout << std::dec << std::endl;
 
-        uint8_t power = decodedData[1][5] & 0b0001;
-        std::cout << "Power: " << (power ? "ON" : "OFF") << std::endl;
+        uint8_t power = decodedData[1][5] & 0x0f;
+        std::cout << "Power: ";
+        if (power == 8)
+            std::cout << "OFF" << std::endl;
+        else if (power == 9)
+            std::cout << "ON" << std::endl;
+        else
+            std::cout << "Unknown" << std::endl;
 
-        uint8_t mode = (decodedData[1][5] >> 4) & 0b0111;
-        std::cout << "Mode: " << static_cast<int>(mode) << std::endl;
+        uint8_t mode = (decodedData[1][5] >> 4) & 0x0f;
+        std::cout << "Mode: ";
+        switch (mode)
+        {
+        case 0:
+            std::cout << "Auto" << std::endl;
+            break;
+        case 2:
+            std::cout << "Dry" << std::endl;
+            break;
+        case 3:
+            std::cout << "Cool" << std::endl;
+            break;
+        case 4:
+            std::cout << "Heat" << std::endl;
+            break;
+        case 6:
+            std::cout << "Fan" << std::endl;
+            break;
+        default:
+            std::cout << "Unknown" << std::endl;
+            break;
+        }
 
-        uint8_t temperature = (decodedData[1][6] >> 1) & 0b00111111;
+        uint8_t temperature = (decodedData[1][6] >> 1) & 0xff;
         std::cout << "Temperature: " << static_cast<int>(temperature) << std::endl;
 
         uint8_t fanSpeed = (decodedData[1][8] >> 4) & 0b00001111;
-        std::cout << "Fan Speed: " << static_cast<int>(fanSpeed) << std::endl;
+        std::cout << "Fan Speed: ";
+        switch (fanSpeed)
+        {
+        case 10:
+            std::cout << "Auto" << std::endl;
+            break;
+        case 11:
+            std::cout << "Quiet" << std::endl;
+            break;
+        default:
+            std::cout << static_cast<int>(fanSpeed) - 2 << std::endl;
+            break;
+        }
 
-        uint8_t fanDirection = (decodedData[1][8] >> 3) & 0b1;
-        std::cout << "Fan Direction: " << (fanDirection ? "ON" : "OFF") << std::endl;
+        uint8_t fanDirection = (decodedData[1][8] >> 4) & 0x0f;
+        std::cout << "Fan Direction: ";
+        switch (fanDirection)
+        {
+        case 0:
+            std::cout << "Fixed" << std::endl;
+            break;
+        case 15:
+            std::cout << "Auto" << std::endl;
+            break;
+        default:
+            std::cout << "Unknown" << std::endl;
+            break;
+        }
+
+        uint16_t onTimer = decodedData[1][11];
+        onTimer = (onTimer << 8) & 0x0f00;
+        onTimer |= decodedData[1][10] & 0xff;
+        std::cout << "On Timer: " << onTimer << " minutes" << std::endl;
+
+        uint16_t offTimer = decodedData[1][12];
+        offTimer = (offTimer << 4) & 0xff0;
+        offTimer |= (decodedData[1][11] >> 4) & 0x0f;
+        std::cout << "Off Timer: " << offTimer << " minutes" << std::endl;
+
+        uint8_t streamer = (decodedData[1][16] >> 4) & 0x0f;
+        std::cout << "Streamer: ";
+        if (streamer == 8)
+            std::cout << "OFF" << std::endl;
+        else if (streamer == 9)
+            std::cout << "ON" << std::endl;
+        else
+            std::cout << "Unknown" << std::endl;
     }
 }
 
