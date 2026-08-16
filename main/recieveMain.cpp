@@ -1,4 +1,5 @@
 #include "recieveMain.h"
+#include "decoder_DAIKIN.h"
 
 void recieveMain::init()
 {
@@ -24,14 +25,36 @@ void recieveMain::start()
         }
         else if (!timingData.empty())
         {
-            std::cout << "Timing Data: ";
-            for (const auto &time : timingData)
+            if (timingData.size() > 10)
             {
-                std::cout << time << " ";
+                std::cout << std::dec << "Timing Data: ";
+                for (int i = 0; i < timingData.size(); ++i)
+                {
+                    if (timingData[i] > 1500)
+                        std::cout << i << ": " << timingData[i] << " " << std::endl;
+                }
+                for (const auto &time : timingData)
+                {
+
+                    std::cout << time << " ";
+                }
+                std::cout << std::endl;
+                std::cout << "vector size: " << timingData.size();
+                std::cout << std::endl;
+
+                DecoderDAIKIN decoder;
+                bool decodeResult = decoder.decode(timingData);
+                if (decodeResult)
+                {
+                    std::cout << "Decoding successful!" << std::endl;
+                    decoder.DisplayDecodedData();
+                    decoder.reset(); // Reset the decoder for the next decoding session
+                }
+                else
+                {
+                    std::cout << "Decoding failed." << std::endl;
+                }
             }
-            std::cout << std::endl;
-            std::cout << "vector size: " << timingData.size();
-            std::cout << std::endl;
             timingData.clear();
         }
     }
