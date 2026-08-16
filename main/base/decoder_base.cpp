@@ -23,6 +23,7 @@ void DecoderBase::reset()
 
 void DecoderBase::DisplayDecodedData() const
 {
+#ifdef USE_IOSTREAM_FOR_DEBUG
     std::cout << "Decoded Data:" << std::endl;
     for (const auto &dataVector : decodedData)
     {
@@ -32,5 +33,5 @@ void DecoderBase::DisplayDecodedData() const
         }
         std::cout << std::endl;
     }
+#endif
 }
-

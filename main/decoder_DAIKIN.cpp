@@ -7,11 +7,8 @@ bool DecoderDAIKIN::decode(const std::vector<uint64_t> &timingData)
     bool passLeader = checkLeader(timingData, index);
     bool pass1stData = checkData(timingData, index);
     bool pass2ndData = checkData(timingData, index);
-    std::cout << "passSize: " << passSize << ", passLeader: " << passLeader
-              << ", pass1stData: " << pass1stData << ", pass2ndData: " << pass2ndData
-              << std::endl;
 
-    return passSize && passLeader && pass1stData; // && pass2ndData;
+    return passSize && passLeader && pass1stData && pass2ndData;
 }
 
 bool DecoderDAIKIN::checkSize(const std::vector<uint64_t> &timingData)
@@ -24,13 +21,13 @@ bool DecoderDAIKIN::checkLeader(const std::vector<uint64_t> &timingData, uint64_
     bool ret = false;
     while (index + 1 < timingData.size())
     {
-        if (timingData[index+1] > 10000)
+        if (timingData[index + 1] > 10000)
         {
             ret = true;
             index += SeparatorCount;
             break;
         }
-        index+=2;
+        index += 2;
     }
     return ret;
 }

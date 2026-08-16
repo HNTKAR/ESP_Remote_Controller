@@ -2,7 +2,9 @@
 #define __DECODER_BASE_H__
 #include <vector>
 #include <cstdint>
+#ifdef USE_IOSTREAM_FOR_DEBUG
 #include <iostream>
+#endif
 class DecoderBase
 {
 public:

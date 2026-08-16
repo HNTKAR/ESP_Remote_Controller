@@ -18,3 +18,5 @@ esp_driver_gpio
 esp_driver_gptimer
 
 )
+
+add_compile_definitions(USE_IOSTREAM_FOR_DEBUG)

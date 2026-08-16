@@ -1,6 +1,8 @@
 #ifndef __RECIEVE_MAIN_H__
 #define __RECIEVE_MAIN_H__
+#ifdef USE_IOSTREAM_FOR_DEBUG
 #include <iostream>
+#endif
 #include <vector>
 #include "freertos/FreeRTOS.h"
 #include "base/mode_base.h"
